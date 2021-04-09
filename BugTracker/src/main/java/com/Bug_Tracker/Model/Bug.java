@@ -1,4 +1,4 @@
-package com.Bug_Tracker.domain;
+package com.Bug_Tracker.Model;
 
 import javax.persistence.*;
 import java.util.Date;

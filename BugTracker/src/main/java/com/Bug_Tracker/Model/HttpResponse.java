@@ -1,4 +1,4 @@
-package com.Bug_Tracker.domain;
+package com.Bug_Tracker.Model;
 import org.springframework.http.HttpStatus;
 
 public class HttpResponse {

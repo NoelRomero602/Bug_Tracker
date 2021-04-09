@@ -1,8 +1,6 @@
 package com.Bug_Tracker.service.impl;
 
-import com.Bug_Tracker.domain.Bug;
-import com.Bug_Tracker.exception.domain.BugnameExistException;
-import com.Bug_Tracker.exception.domain.BugnameNotFoundException;
+import com.Bug_Tracker.Model.Bug;
 import com.Bug_Tracker.repository.BugRepository;
 import com.Bug_Tracker.service.BugService;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -33,16 +31,17 @@ public class BugServiceImpl implements BugService {
         return bugRepository.findAll();
     }
 
+
+
     @Override
-    public Bug findBugByBugname(String bugname) {
-         return bugRepository.findBugByBugName(bugname);
+    public Bug findBugByBugId(String id) {
+         return bugRepository.findBugByBugId(id);
     }
 
 
     @Override
-    public Bug addNewBug(String bugName,String description, String priority, String bugType, String systemBug, boolean isActive) throws BugnameNotFoundException, BugnameExistException {
-        validateNewBugname(null,bugName);
-        Bug bug = new Bug();
+    public Bug addNewBug(String bugName,String description, String priority, String bugType, String systemBug, boolean isActive) //throws BugnameNotFoundException, BugnameExistException {
+    { Bug bug = new Bug();
         bug.setBugId(generateBugId());
         bug.setBugDescription(description);
         bug.setBugPriority(priority);
@@ -55,9 +54,11 @@ public class BugServiceImpl implements BugService {
         return bug;
     }
 
+
+
     @Override
-    public Bug updateBug(String currentBugname,String newBugname,String newDescription, String newPriority, String newBugType, String newSystemBug, boolean newIsActive) throws BugnameNotFoundException, BugnameExistException
-    { Bug bug = validateNewBugname(currentBugname,newBugname);
+    public Bug updateBug(String id,String newBugname,String newDescription, String newPriority, String newBugType, String newSystemBug, boolean newIsActive) //throws BugnameNotFoundException, BugnameExistException
+    { Bug bug = findBugByBugId(id);// currentBug
         bug.setBugDescription(newDescription);
         bug.setSystemBug(newSystemBug);
         bug.setBugType(newBugType);
@@ -66,27 +67,6 @@ public class BugServiceImpl implements BugService {
         bug.setBugName(newBugname);
         bugRepository.save(bug);
         return bug;
-    }
-
-
-    private Bug validateNewBugname(String currentBugname, String newBugname) throws BugnameNotFoundException, BugnameExistException
-     {   Bug bugByNewBugname = findBugByBugname(newBugname);
-        if(StringUtils.isNotBlank(currentBugname)) {
-            Bug currentBug = findBugByBugname(currentBugname);
-            if(currentBug == null) {
-                throw new BugnameNotFoundException("No bug found by bugname" + currentBugname);
-            }
-            if(bugByNewBugname != null && !currentBug.getId().equals(bugByNewBugname.getId())) {
-                throw new BugnameExistException("Bugname already exists");
-            }
-            return currentBug;
-        } else {
-
-            if(bugByNewBugname != null) {
-                throw new BugnameExistException("Bugname already exists");
-            }
-            return null;
-        }
     }
 
 

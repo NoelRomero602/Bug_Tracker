@@ -1,7 +1,7 @@
 package com.Bug_Tracker.filter;
 
 import com.Bug_Tracker.constant.SecurityConstant;
-import com.Bug_Tracker.domain.HttpResponse;
+import com.Bug_Tracker.Model.HttpResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import static org.springframework.http.HttpStatus.FORBIDDEN;

@@ -1,7 +1,7 @@
 package com.Bug_Tracker.filter;
 
 import com.Bug_Tracker.constant.SecurityConstant;
-import com.Bug_Tracker.domain.HttpResponse;
+import com.Bug_Tracker.Model.HttpResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.access.AccessDeniedHandler;

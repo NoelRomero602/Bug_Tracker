@@ -1,6 +1,6 @@
-package com.Bug_Tracker.resource;
-import com.Bug_Tracker.domain.Bug;
-import com.Bug_Tracker.domain.HttpResponse;
+package com.Bug_Tracker.Controller;
+import com.Bug_Tracker.Model.Bug;
+import com.Bug_Tracker.Model.HttpResponse;
 import com.Bug_Tracker.exception.domain.*;
 import com.Bug_Tracker.service.BugService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,13 +15,13 @@ import java.io.IOException;
 import java.util.List;
 @RestController
 @RequestMapping(path = {"/" ,"/bug"})
-public class BugResource
+public class BugController
 {
         private BugService bugService;
 
         
         @Autowired
-        public BugResource(BugService bugService) {
+        public BugController(BugService bugService) {
             this.bugService = bugService;
 
         }
@@ -35,7 +35,7 @@ public class BugResource
                                                @RequestParam("systemBug") String systemBug,
                                                @RequestParam("isActive") String isActive,
                                              @RequestParam("bugName") String bugName)
-                throws IOException, BugnameNotFoundException, BugnameExistException {
+                throws IOException {
 
             Bug newBug = bugService.addNewBug (bugName, description, priority, bugType, systemBug, Boolean.parseBoolean(isActive));
             return new ResponseEntity<>(newBug, OK);
@@ -43,14 +43,15 @@ public class BugResource
 
         @PostMapping("/updateBug")
         @PreAuthorize("hasAnyAuthority('user:update')")
-        public ResponseEntity<Bug> updateBug(@RequestParam("currentBugName") String currentBugName,
+        public ResponseEntity<Bug> updateBug(@RequestParam("currentBugName") String name,
                                              @RequestParam("newBugName") String newBugName,
                                              @RequestParam("description") String description,
                                              @RequestParam("priority") String priority,
                                              @RequestParam("bugType") String bugType,
                                              @RequestParam("systemBug") String systemBug,
-                                             @RequestParam("isActive") String isActive) throws BugnameNotFoundException, BugnameExistException {
-            Bug updatedBug = bugService.updateBug(currentBugName,newBugName,description, priority, bugType, systemBug, Boolean.parseBoolean(isActive));
+                                             @RequestParam("isActive") String isActive)// throws BugnameNotFoundException, BugnameExistException {
+        {
+            Bug updatedBug = bugService.updateBug(name,newBugName,description, priority, bugType, systemBug, Boolean.parseBoolean(isActive));
             return new ResponseEntity<>(updatedBug, OK);
         }
 

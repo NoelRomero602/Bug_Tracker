@@ -1,4 +1,4 @@
-package com.Bug_Tracker.domain;
+package com.Bug_Tracker.Model;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -15,15 +15,13 @@ public class User {
     private String username;
     private String password;
     private String email;
-    private Date lastLoginDate;
-    private Date joinDate;
     private String role;
     private String[] authorities;
     private boolean isActive;
 
     public User(){}
 
-    public User(Long id, String userId, String firstName, String lastName, String username, String password, String email, Date lastLoginDate, Date joinDate, String role, String[] authorities, boolean isActive) {
+    public User(Long id, String userId, String firstName, String lastName, String username, String password, String email,  String role, String[] authorities, boolean isActive) {
         this.id = id;
         this.userId = userId;
         this.firstName = firstName;
@@ -31,8 +29,7 @@ public class User {
         this.username = username;
         this.password = password;
         this.email = email;
-        this.lastLoginDate = lastLoginDate;
-        this.joinDate = joinDate;
+
         this.role = role;
         this.authorities = authorities;
         this.isActive = isActive;
@@ -94,23 +91,6 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-
-    public Date getLastLoginDate() {
-        return lastLoginDate;
-    }
-
-    public void setLastLoginDate(Date lastLoginDate) {
-        this.lastLoginDate = lastLoginDate;
-    }
-
-    public Date getJoinDate() {
-        return joinDate;
-    }
-
-    public void setJoinDate(Date joinDate) {
-        this.joinDate = joinDate;
     }
 
     public String getRole() {

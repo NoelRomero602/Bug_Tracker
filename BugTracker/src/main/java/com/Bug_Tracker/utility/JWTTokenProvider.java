@@ -1,7 +1,9 @@
 package com.Bug_Tracker.utility;
 
+//import com.Bug_Tracker.Model.AdminPrinciple;
+import com.Bug_Tracker.Model.AdminPrinciple;
 import com.Bug_Tracker.constant.SecurityConstant;
-import com.Bug_Tracker.domain.UserPrincipal;
+import com.Bug_Tracker.Model.UserPrincipal;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
@@ -32,6 +34,14 @@ public class JWTTokenProvider {
         String[] claims = getClaimsFromUser(userPrincipal);
         return JWT.create().withIssuer(SecurityConstant.GET_ARRAYS_LLC).withAudience(SecurityConstant.GET_ARRAYS_ADMINISTRATION)
                 .withIssuedAt(new Date()).withSubject(userPrincipal.getUsername())
+                .withArrayClaim(SecurityConstant.AUTHORITIES, claims).withExpiresAt(new Date(System.currentTimeMillis() + SecurityConstant.EXPIRATION_TIME))
+                .sign(HMAC512(secret.getBytes()));
+    }
+
+    public String generateAdminJwtToken(AdminPrinciple admin) {
+        String[] claims = getClaimsFromAdmin(admin);
+        return JWT.create().withIssuer(SecurityConstant.GET_ARRAYS_LLC).withAudience(SecurityConstant.GET_ARRAYS_ADMINISTRATION)
+                .withIssuedAt(new Date()).withSubject(admin.getUsername())
                 .withArrayClaim(SecurityConstant.AUTHORITIES, claims).withExpiresAt(new Date(System.currentTimeMillis() + SecurityConstant.EXPIRATION_TIME))
                 .sign(HMAC512(secret.getBytes()));
     }
@@ -82,6 +92,13 @@ public class JWTTokenProvider {
     }
 
     private String[] getClaimsFromUser(UserPrincipal user) {
+        List<String> authorities = new ArrayList<>();
+        for (GrantedAuthority grantedAuthority : user.getAuthorities()){
+            authorities.add(grantedAuthority.getAuthority());
+        }
+        return authorities.toArray(new String[0]);
+    }
+    private String[] getClaimsFromAdmin(AdminPrinciple user) {
         List<String> authorities = new ArrayList<>();
         for (GrantedAuthority grantedAuthority : user.getAuthorities()){
             authorities.add(grantedAuthority.getAuthority());

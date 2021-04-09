@@ -1,10 +1,9 @@
 package com.Bug_Tracker.service.impl;
 import com.Bug_Tracker.enumeration.Role;
 
-import com.Bug_Tracker.domain.User;
-import com.Bug_Tracker.domain.UserPrincipal;
+import com.Bug_Tracker.Model.User;
+import com.Bug_Tracker.Model.UserPrincipal;
 import com.Bug_Tracker.exception.domain.EmailExistException;
-import com.Bug_Tracker.exception.domain.EmailNotFoundException;
 import com.Bug_Tracker.exception.domain.UsernameExistException;
 import com.Bug_Tracker.repository.UserRepository;
 import com.Bug_Tracker.service.UserService;
@@ -25,7 +24,6 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
-import static com.Bug_Tracker.enumeration.Role.ROLE_USER;
 import static org.apache.commons.lang3.StringUtils.EMPTY;
 
 @Transactional // data safety precaution especially for CRUD operations
@@ -35,24 +33,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     private UserRepository userRepository;
     private BCryptPasswordEncoder passwordEncoder;
 
-    private Logger LOGGER = LoggerFactory.getLogger(getClass());
+   // private Logger LOGGER = LoggerFactory.getLogger(getClass());
     @Autowired
     UserServiceImpl(UserRepository userRepository, BCryptPasswordEncoder passwordEncoder){
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
-    }
-
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findUserByUsername(username);
-        if(user == null){ throw new UsernameNotFoundException("User not found by username: " + username);}
-        else
-            {
-                userRepository.save(user);
-                UserPrincipal userPrincipal = new UserPrincipal(user);
-                return userPrincipal;
-            }
-
     }
 
     private String generateUserId() {
@@ -64,72 +49,23 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public User register(String firstName, String lastName, String username, String password, String email) throws UsernameNotFoundException ,UsernameExistException, EmailExistException {
-        validateNewUsernameAndEmail(EMPTY, username, email);
+       // validateNewUsernameAndEmail(EMPTY, username, email);
         User user = new User();
         user.setUserId(generateUserId());
         user.setFirstName(firstName);
         user.setLastName(lastName);
         user.setUsername(username);
         user.setEmail(email);
-        user.setJoinDate(new Date());
         user.setPassword(encodePassword(password));
         user.setActive(true);
-        user.setRole(Role.ROLE_HR.name());
-        user.setAuthorities(Role.ROLE_HR.getAuthorities());
+        user.setRole(Role.ROLE_USER.name());
+        user.setAuthorities(Role.ROLE_USER.getAuthorities());
         userRepository.save(user); // saves user in mysql database
         return user;
     }
 
-
-
-    @Override
-    public User addNewUser(String firstName, String lastName, String username, String email, String role, boolean isActive, String password) throws UsernameNotFoundException, UsernameExistException, EmailExistException {
-        validateNewUsernameAndEmail(EMPTY, username, email);
-        User user = new User();
-        user.setUserId(generateUserId());
-        user.setFirstName(firstName);
-        user.setLastName(lastName);
-        user.setJoinDate(new Date());
-        user.setUsername(username);
-        user.setEmail(email);
-        user.setPassword(encodePassword(password));
-        user.setActive(isActive);
-        user.setRole(getRoleEnumName(role).name());
-        user.setAuthorities(getRoleEnumName(role).getAuthorities());
-        userRepository.save(user);
-        LOGGER.info("New user password: " + password);
-        return user;
-    }
-
-
-
-    private Role getRoleEnumName(String role) {
-        return Role.valueOf(role.toUpperCase());
-    }
-
-    @Override
-    public User updateUser(String currentUsername, String newFirstName, String newLastName, String newUsername, String newEmail, String role, boolean isActive) throws UsernameNotFoundException, UsernameExistException, EmailExistException {
-        User currentUser = validateNewUsernameAndEmail(currentUsername, newUsername, newEmail);
-        currentUser.setFirstName(newFirstName);
-        currentUser.setLastName(newLastName);
-        currentUser.setUsername(newUsername);
-        currentUser.setEmail(newEmail);
-        currentUser.setActive(isActive);
-        currentUser.setRole(getRoleEnumName(role).name());
-        currentUser.setAuthorities(getRoleEnumName(role).getAuthorities());
-        userRepository.save(currentUser);
-        return currentUser;
-    }
-
-    @Override
-    public void deleteUser(Long id) {
-         userRepository.deleteById(id);
-    }
-
-
-
     private User validateNewUsernameAndEmail(String currentUsername, String newUsername, String newEmail) throws UsernameNotFoundException, UsernameExistException, EmailExistException {
-    User userByNewUsername = findUserByUsername(newUsername);
+        User userByNewUsername = findUserByUsername(newUsername);
         User userByNewEmail = findUserByEmail(newEmail);
         if(StringUtils.isNotBlank(currentUsername)) {
             User currentUser = findUserByUsername(currentUsername);
@@ -157,14 +93,46 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
 
 
+
+
+    private Role getRoleEnumName(String role) {
+        return Role.valueOf(role.toUpperCase());
+    }
+
+   /* @Override
+    public User updateUser(String currentUsername, String newFirstName, String newLastName, String newUsername, String newEmail) throws UsernameNotFoundException, UsernameExistException, EmailExistException {
+        User currentUser = findUserByUsername(currentUsername);//validateNewUsernameAndEmail(currentUsername, newUsername, newEmail);
+        currentUser.setFirstName(newFirstName);
+        currentUser.setLastName(newLastName);
+        currentUser.setUsername(newUsername);
+        currentUser.setEmail(newEmail);
+      //  currentUser.setActive(isActive);
+      //  currentUser.setRole(getRoleEnumName(role).name());
+      //  currentUser.setAuthorities(getRoleEnumName(role).getAuthorities());
+        userRepository.save(currentUser);
+        return currentUser;
+    }*/
+
+
+    @Override
+    public User findUserByUsername(String username) {
+        return userRepository.findUserByUsername(username);
+    }
+
     @Override
     public List<User> getUsers() {
         return userRepository.findAll();
     }
 
     @Override
-    public User findUserByUsername(String username) {
-        return userRepository.findUserByUsername(username);
+    public void deleteUser(Long id) {
+      userRepository.findById(id);
+
+    }
+
+    @Override
+    public User updateRole(String role, String username) throws IOException {
+        return null;
     }
 
     @Override
@@ -173,6 +141,16 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
 
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        User user = userRepository.findUserByUsername(username);
+        if(user == null){ throw new UsernameNotFoundException("User not found by username: " + username);}
+        else
+        {
+            userRepository.save(user);
+            UserPrincipal userPrincipal = new UserPrincipal(user);
+            return userPrincipal;
+        }
 
-
+    }
 }

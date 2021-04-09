@@ -1,27 +1,19 @@
 package com.Bug_Tracker.exception;
 
-import com.Bug_Tracker.domain.HttpResponse;
+import com.Bug_Tracker.Model.HttpResponse;
 import com.Bug_Tracker.exception.domain.*;
 import com.auth0.jwt.exceptions.TokenExpiredException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.web.servlet.error.ErrorController;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.DisabledException;
-import org.springframework.security.authentication.LockedException;
-import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
 import javax.persistence.NoResultException;
-import java.io.IOException;
-import java.util.Objects;
 
 import static org.springframework.http.HttpStatus.*;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
@@ -69,15 +61,7 @@ public class ExceptionHandling {
     public ResponseEntity<HttpResponse> userNotFoundException(UsernameNotFoundException exception) {
         return createHttpResponse(BAD_REQUEST, exception.getMessage());
     }
-    // these returned to postman, otherwise it would just return to console
-    @ExceptionHandler(BugnameNotFoundException.class)
-    public ResponseEntity<HttpResponse> BugnameNotFoundException(BugnameNotFoundException exception) {
-        return createHttpResponse(BAD_REQUEST, exception.getMessage());
-    }
-    @ExceptionHandler(BugnameExistException.class)
-    public ResponseEntity<HttpResponse> BugnameExistException(BugnameExistException exception) {
-        return createHttpResponse(BAD_REQUEST, exception.getMessage());
-    }
+
 
    @ExceptionHandler(NoHandlerFoundException.class)
     public ResponseEntity<HttpResponse> noHandlerFoundException(NoHandlerFoundException e) {
