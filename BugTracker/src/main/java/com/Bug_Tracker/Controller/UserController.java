@@ -30,7 +30,7 @@ public class UserController {
     private AuthenticationManager authenticationManager;
     private JWTTokenProvider jwtTokenProvider;
     @Autowired
-    public UserController(UserService userService, AuthenticationManager authenticationManager, JWTTokenProvider jwtTokenProvider) {
+    public UserController(UserService userService,@Qualifier("auth1") AuthenticationManager authenticationManager, JWTTokenProvider jwtTokenProvider) {
         this.userService = userService;
         this.authenticationManager = authenticationManager;
         this.jwtTokenProvider = jwtTokenProvider;

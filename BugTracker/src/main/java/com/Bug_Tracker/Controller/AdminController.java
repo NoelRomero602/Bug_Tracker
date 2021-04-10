@@ -33,7 +33,7 @@ public class AdminController {
   //  @Autowired
    private JWTTokenProvider jwtTokenProvider;
   //  @Autowired
-   private AuthenticationManager authenticationManager;
+   private AuthenticationManager test;
    // @Autowired
    private AdminService adminService;
    // @Autowired
@@ -42,10 +42,10 @@ public class AdminController {
    private UserRepository userRepository;
 
  @Autowired // we can autowire userserivce because the implementation uses @service annotation
-    public AdminController(UserService userService, JWTTokenProvider jwtTokenProvider, AuthenticationManager authenticationManager,UserRepository userRepository,AdminService adminService,AdminRepository adminRepository){
+    public AdminController(UserService userService, JWTTokenProvider jwtTokenProvider, @Qualifier("test") AuthenticationManager test, UserRepository userRepository, AdminService adminService, AdminRepository adminRepository){
         this.userService = userService;
         this.jwtTokenProvider = jwtTokenProvider;
-        this.authenticationManager = authenticationManager;
+        this.test = test;
         this.userRepository = userRepository;
         this.adminService = adminService;
         this.adminRepository = adminRepository;
@@ -75,7 +75,7 @@ public class AdminController {
     }
 
     private void authenticate(String username, String password) {
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username,password));
+        test.authenticate(new UsernamePasswordAuthenticationToken(username,password));
     }
 
     @GetMapping("/find/{username}") // let admin search users by username
