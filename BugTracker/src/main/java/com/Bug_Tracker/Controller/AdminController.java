@@ -27,6 +27,7 @@ import static org.springframework.http.HttpStatus.OK;
 
 @RestController
 @RequestMapping(path ={"/","adminPortal"})
+// @CrossOrigin("http://localost:4200")
 public class AdminController {
   //  @Autowired
    private UserService userService;
@@ -42,7 +43,7 @@ public class AdminController {
    private UserRepository userRepository;
 
  @Autowired // we can autowire userserivce because the implementation uses @service annotation
-    public AdminController(UserService userService, JWTTokenProvider jwtTokenProvider, @Qualifier("test") AuthenticationManager test, UserRepository userRepository, AdminService adminService, AdminRepository adminRepository){
+    public AdminController(UserService userService, JWTTokenProvider jwtTokenProvider, @Qualifier("auth2") AuthenticationManager test, UserRepository userRepository, AdminService adminService, AdminRepository adminRepository){
         this.userService = userService;
         this.jwtTokenProvider = jwtTokenProvider;
         this.test = test;
@@ -58,6 +59,7 @@ public class AdminController {
     }
 
     @PostMapping("/login")
+    @PreAuthorize("hasAnyAuthority('admin:login')")
     public ResponseEntity<Admin> login(@RequestBody Admin adminUser) {
         authenticate(adminUser.getUsername(),adminUser.getPassword());
         Admin loginAdmin = adminRepository.findAdminByUsername(adminUser.getUsername()); //() part returns string // could do by Id since id is a primary key
@@ -95,13 +97,7 @@ public class AdminController {
         userService.deleteUser(id);
         return response(OK, "USER_DELETED_SUCCESSFULLY");
     }
-    @PostMapping("/update")
-    @PreAuthorize("hasAnyAuthority('admin:update')") // allow admin to update a users role by username which is a primary key
-    public ResponseEntity<User> updateRole( @RequestParam("username") String username,
-                                       @RequestParam("role") String role) throws IOException {
-        User updatedUser = userService.updateRole(role,username); // updateRole returns user thats why we assign it as type User
-        return new ResponseEntity<>(updatedUser, OK);
-    }
+
 
 
     private ResponseEntity<HttpResponse> response(HttpStatus httpStatus, String message) {

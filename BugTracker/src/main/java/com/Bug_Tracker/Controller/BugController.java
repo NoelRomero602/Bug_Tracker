@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.util.List;
 @RestController
 @RequestMapping(path = {"/" ,"/bug"})
+@CrossOrigin("http://localost:4200")
 public class BugController
 {
         private BugService bugService;
@@ -27,8 +28,7 @@ public class BugController
         }
 
         @PostMapping("/addBug")
-        //@RequestParam is for form data
-        @PreAuthorize("hasAnyAuthority('user:create')") // only authenticated users with create privilege can add a bug
+        @PreAuthorize("hasAnyAuthority('user:create')")
         public ResponseEntity<Bug> addNewBug(@RequestParam("description") String description,
                                                @RequestParam("priority") String priority,
                                                @RequestParam("bugType") String bugType,
@@ -58,7 +58,6 @@ public class BugController
 
 
         @GetMapping("/list")
-        @PreAuthorize("hasAnyAuthority('user:read')")
         public ResponseEntity<List<Bug>> getAllBugs() {
             List<Bug> bugs = bugService.getBugs();
             return new ResponseEntity<>(bugs, OK);

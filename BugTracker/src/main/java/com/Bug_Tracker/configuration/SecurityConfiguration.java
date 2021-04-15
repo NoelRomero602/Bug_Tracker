@@ -35,7 +35,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     private JWTAuthenticationEntryPoint JWTAuthenticationEntryPoint;
     private UserDetailsService userDetailsService;
     private BCryptPasswordEncoder bCryptPasswordEncoder;
-    private UserDetailsService userDetailsService2;
     @Autowired
     public SecurityConfiguration(JWTAuthorizationFilter jwtAuthorizationFilter,
                                  JWTAccessDeniedHandler jwtAccessDeniedHandler,
@@ -47,7 +46,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         JWTAuthenticationEntryPoint = jwtAuthenticationEntryPoint;
         this.userDetailsService = userDetailsService;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
-      //  this.userDetailsService2 = userDetailsService2;
+
     }
 
     @Override
@@ -55,9 +54,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder);
     }
 
- 		/*protected void configureGlobal(AuthenticationManagerBuilder auth) throws Exception{
- 		   auth.userDetailsService(userDetailsService2).passwordEncoder(bCryptPasswordEncoder);
- 		}*/
 
 
     // "http.csrf().disable().cors()" disabling cross site forgery since were not using it, then enable cors which means if someone doesnt specify this domain they will be rejected

@@ -19,7 +19,7 @@ public interface UserService {
     User findUserByUsername(String username);
     List<User> getUsers();
     void deleteUser(Long id);
-    User updateRole(String role, String username ) throws IOException;
+    User updateUser(String currentUsername, String newFirstName, String newLastName, String newUsername, String newEmail ) throws IOException;
    // List<User> getUsers();
 
     //User addNewUser(String firstName, String lastName, String username, String email, String role, boolean isActive, String password) throws UsernameNotFoundException, UsernameExistException, EmailExistException, IOException;

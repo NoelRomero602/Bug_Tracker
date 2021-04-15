@@ -25,6 +25,7 @@ import static org.springframework.http.HttpStatus.OK;
 
 @RestController
 @RequestMapping(path = {"/user"})
+@CrossOrigin("http://localost:4200")
 public class UserController {
     private UserService userService;
     private AuthenticationManager authenticationManager;
@@ -45,15 +46,7 @@ public class UserController {
         HttpHeaders jwtHeaders = getJWTHeader(userPrincipal);
         return new ResponseEntity<>(loginUser, jwtHeaders, OK);
     }
-    /*
-    @PostMapping("/login")
-    public ResponseEntity<User> login(@RequestBody User user) {
-        authenticate(user.getUsername(), user.getPassword());
-        User loginUser = userService.findUserByUsername(user.getUsername());
-        UserPrincipal userPrincipal = new UserPrincipal(loginUser);
-        HttpHeaders jwtHeader = getJwtHeader(userPrincipal);
-        return new ResponseEntity<>(loginUser, jwtHeader, OK);
-     */
+
     private HttpHeaders getJWTHeader(UserPrincipal user) {
         HttpHeaders headers = new HttpHeaders();
         headers.add(SecurityConstant.JWT_TOKEN_HEADER,jwtTokenProvider.generateJwtToken(user));
@@ -68,16 +61,16 @@ public class UserController {
     }
 
 
-   /* @PostMapping("/update")
+    @PostMapping("/update")
     @PreAuthorize("hasAnyAuthority('user:update')")
     public ResponseEntity<User> update(@RequestParam("currentUsername") String currentUsername,
                                        @RequestParam("firstName") String firstName,
                                        @RequestParam("lastName") String lastName,
                                        @RequestParam("username") String username,
-                                       @RequestParam("email") String email) throws UsernameNotFoundException, UsernameExistException, EmailExistException, IOException {
+                                       @RequestParam("email") String email) throws IOException {
         User updatedUser = userService.updateUser(currentUsername, firstName, lastName, username,email);
         return new ResponseEntity<>(updatedUser, OK);
-    }*/
+    }
 
 
     private void authenticate(String username, String password) {

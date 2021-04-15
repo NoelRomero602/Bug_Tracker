@@ -69,7 +69,7 @@ public class AdminSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
    @Bean
-   @Qualifier("test")
+   @Qualifier("auth2")
     public AuthenticationManager authenticationManagerBean2() throws Exception {
         return super.authenticationManagerBean();
     }

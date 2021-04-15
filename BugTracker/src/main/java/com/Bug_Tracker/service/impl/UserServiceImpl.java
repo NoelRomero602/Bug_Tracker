@@ -99,9 +99,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         return Role.valueOf(role.toUpperCase());
     }
 
-   /* @Override
-    public User updateUser(String currentUsername, String newFirstName, String newLastName, String newUsername, String newEmail) throws UsernameNotFoundException, UsernameExistException, EmailExistException {
-        User currentUser = findUserByUsername(currentUsername);//validateNewUsernameAndEmail(currentUsername, newUsername, newEmail);
+@Override
+    public User updateUser(String currentUsername, String newFirstName, String newLastName, String newUsername, String newEmail) throws  IOException //, UsernameExistException, EmailExistException {
+    { User currentUser = findUserByUsername(currentUsername);//validateNewUsernameAndEmail(currentUsername, newUsername, newEmail);
         currentUser.setFirstName(newFirstName);
         currentUser.setLastName(newLastName);
         currentUser.setUsername(newUsername);
@@ -111,7 +111,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
       //  currentUser.setAuthorities(getRoleEnumName(role).getAuthorities());
         userRepository.save(currentUser);
         return currentUser;
-    }*/
+    }
 
 
     @Override
@@ -130,10 +130,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     }
 
-    @Override
-    public User updateRole(String role, String username) throws IOException {
-        return null;
-    }
+
+
+
 
     @Override
     public User findUserByEmail(String email) {

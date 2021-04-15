@@ -1,21 +1,15 @@
 package com.Bug_Tracker.service.impl;
 
-//import com.Bug_Tracker.Model.Admin;
 import com.Bug_Tracker.Model.Admin;
 import com.Bug_Tracker.Model.AdminPrinciple;
 import com.Bug_Tracker.Model.User;
-import com.Bug_Tracker.Model.UserPrincipal;
 import com.Bug_Tracker.enumeration.Role;
-//import com.Bug_Tracker.repository.AdminRepository;
 import com.Bug_Tracker.exception.domain.EmailExistException;
 import com.Bug_Tracker.exception.domain.UsernameExistException;
 import com.Bug_Tracker.repository.AdminRepository;
 import com.Bug_Tracker.repository.UserRepository;
-//import com.Bug_Tracker.service.AdminService;
 import com.Bug_Tracker.service.AdminService;
-import com.Bug_Tracker.service.UserService;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -85,6 +79,18 @@ public class AdminServiceImpl implements AdminService, UserDetailsService {
             return null;
         }
     }*/
+   /*
+    @Override
+    public User updateRole(String currentUsername, String newFirstName, String newLastName, String newUsername, String newEmail) throws IOException {
+        User currentUser = findUserByUsername(currentUsername);//validateNewUsernameAndEmail(currentUsername, newUsername, newEmail);
+        currentUser.setFirstName(newFirstName);
+        currentUser.setLastName(newLastName);
+        currentUser.setUsername(newUsername);
+        currentUser.setEmail(newEmail);
+        userRepository.save(currentUser);
+        return currentUser;
+    }
+    */
 
     @Override
     public List<User> getUsers() {
